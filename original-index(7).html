@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Assisted Smart Water Quality Monitoring and Management System</title>
+<meta name="description" content="Smart water quality monitoring and management platform">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f0f6fa;
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-light: #e0f2fe;
+  --accent: #0d9488;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.06);
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --red: #e11d48;
+  --red-bg: #ffe4e6;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; border: 0; }
+
+/* ================= CLEAN, HUMAN-MADE LIGHT OPENING INTERFACE ================= */
+.welcome {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f8fc 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-nav {
+  max-width: 1160px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.hero-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #0284c7;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.hero-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-text-link {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 4px;
+  transition: color 0.15s ease;
+}
+.nav-text-link:hover {
+  color: var(--primary);
+}
+
+.welcome-inner {
+  max-width: 1160px;
+  width: 100%;
+  margin: auto;
+  padding: 24px 28px 64px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-subtitle {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.welcome h1 {
+  font-size: clamp(34px, 4.2vw, 50px);
+  line-height: 1.14;
+  margin: 0 0 18px;
+  letter-spacing: -1.2px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.welcome h1 span {
+  color: var(--primary);
+}
+
+.welcome p {
+  font-size: 16px;
+  line-height: 1.68;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.btn {
+  padding: 13px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14.5px;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-hero-primary {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+.btn-hero-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-hero-secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid #cbd5e1;
+}
+.btn-hero-secondary:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.hero-summary-row {
+  display: flex;
+  gap: 28px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+.hero-summary-row div strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.hero-preview-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.preview-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+.preview-station {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.preview-station small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.safe-pill {
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+
+.wqi-summary-box {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.wqi-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: conic-gradient(#0284c7 0% 94%, #e2e8f0 94% 100%);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.wqi-circle-inner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.wqi-circle-inner b {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+.wqi-circle-inner small {
+  font-size: 9.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.wqi-text h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.wqi-text p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.p-item {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.p-item small {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.p-item strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.preview-footer {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  padding: 11px 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #0369a1;
+}
+
+/* ================= LIGHT & CLEAN DASHBOARD WORKSPACE ================= */
+#app { display: none; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid var(--border);
+  position: fixed;
+  inset: 0 auto 0 0;
+  padding: 20px 15px;
+  overflow-y: auto;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 8px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #0284c7;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+}
+.brand strong { display: block; font-size: 16px; color: var(--text); font-weight: 700; }
+.brand small { color: var(--muted); font-size: 11px; font-weight: 500; }
+
+.nav-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: #94a3b8;
+  padding: 18px 12px 6px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 9.5px 12px;
+  margin: 2px 0;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 9px;
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.nav-item:hover {
+  background: #f1f5f9;
+  color: var(--text);
+}
+.nav-item.active {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+}
+.nav-icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-count {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.nav-badge-ai {
+  margin-left: auto;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.main { margin-left: 260px; min-height: 100vh; }
+
+.topbar {
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.top-left { display: flex; align-items: center; gap: 14px; }
+.topbar h2 { font-size: 17px; font-weight: 700; margin: 0; color: var(--text); }
+.topbar small { color: var(--muted); font-size: 12px; }
+.top-actions { display: flex; align-items: center; gap: 10px; }
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  transition: 0.15s;
+}
+.icon-btn:hover { background: #e0f2fe; color: #0284c7; border-color: #bae6fd; }
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.content { padding: 26px 28px 48px; max-width: 1480px; margin: auto; }
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+.page-head h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.4px; }
+.page-head p { margin: 0; color: var(--muted); font-size: 13.5px; }
+
+.demo-pill {
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.grid { display: grid; gap: 18px; }
+.kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 20px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.kpi-top { display: flex; justify-content: space-between; align-items: center; }
+.kpi-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--tint, #e0f2fe);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.trend { font-size: 11.5px; color: var(--green); font-weight: 600; }
+.kpi-value { font-size: 24px; font-weight: 700; margin: 14px 0 4px; letter-spacing: -0.5px; color: var(--text); }
+.kpi-label { font-size: 12.5px; color: var(--muted); }
+
+.section-grid { grid-template-columns: 1.45fr 1fr; margin-bottom: 18px; }
+.section-title { font-size: 15px; font-weight: 700; margin: 0 0 15px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+
+.chart-wrap { height: 250px; position: relative; }
+.chart-wrap.short { height: 205px; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.ok { background: var(--green-bg); color: var(--green); }
+.warn { background: var(--amber-bg); color: var(--amber); }
+.bad { background: var(--red-bg); color: var(--red); }
+.muted { color: var(--muted); }
+
+.table-wrap { overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; color: var(--muted); font-weight: 600; background: #f8fafc; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; }
+th, td { padding: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { color: var(--text); }
+
+.bar { height: 8px; background: #e2e8f0; border-radius: 20px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: #0284c7; border-radius: 20px; }
+
+/* Tank Visualization */
+.tank-row { display: flex; align-items: center; gap: 24px; }
+.tank-visual {
+  width: 115px;
+  height: 180px;
+  border: 3px solid #7dd3fc;
+  border-radius: 16px 16px 22px 22px;
+  position: relative;
+  overflow: hidden;
+  background: #f0f9ff;
+  flex-shrink: 0;
+}
+.tank-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 68%;
+  background: #0ea5e9;
+  transition: height 0.4s ease;
+}
+.tank-info h2 { font-size: 30px; font-weight: 700; margin: 0; color: var(--text); }
+.tank-info p { font-size: 13px; color: var(--muted); margin: 5px 0 14px; }
+
+/* Forms & Buttons */
+.field { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.field label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.field input, .field select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--text);
+  outline: none;
+}
+.field input:focus, .field select:focus { border-color: var(--primary); }
+
+.action-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.small-btn { padding: 9px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 600; transition: 0.15s; }
+.primary { background: var(--primary); color: #fff; }
+.primary:hover { background: var(--primary-hover); }
+.soft { background: #e0f2fe; color: #0369a1; }
+.soft:hover { background: #bae6fd; }
+.danger { background: var(--red-bg); color: var(--red); }
+.success { background: var(--green-bg); color: var(--green); }
+
+.metric-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.metric { padding: 13px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; }
+.metric strong { font-size: 17px; font-weight: 700; display: block; color: var(--text); }
+.metric small { color: var(--muted); font-size: 11.5px; }
+
+.notice {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin-top: 14px;
+}
+.notice.red { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+.notice.blue { background: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
+
+.pipeline { display: flex; align-items: center; margin: 28px 0 18px; }
+.pipe-segment { height: 8px; background: #38bdf8; flex: 1; position: relative; }
+.pipe-segment::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -5px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #bae6fd;
+  background: #0284c7;
+  border-radius: 50%;
+}
+.pipe-node {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.alert-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.alert-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.alert-row strong { font-size: 13px; color: var(--text); }
+.alert-row p { font-size: 12px; color: var(--text-secondary); margin: 4px 0; }
+.alert-row small { color: var(--muted); font-size: 11.5px; }
+
+/* Water Quality Specific Cards */
+.wq-param-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 15px;
+  background: #ffffff;
+}
+.wq-range-bar {
+  height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #fda4af 0%, #6ee7b7 25%, #34d399 75%, #fda4af 100%);
+  position: relative;
+  margin: 12px 0 6px;
+}
+.wq-marker {
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0f172a;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transform: translateX(-50%);
+}
+
+/* AI Water Quality Predictor Styles */
+.ai-prob-bar {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 6px 0 12px;
+}
+.ai-prob-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+.ai-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.empty { padding: 30px; text-align: center; color: var(--muted); font-size: 13px; }
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  background: #0f172a;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+  z-index: 50;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: 0.2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.mobile-menu { display: none; }
+
+@media (max-width: 1100px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .section-grid { grid-template-columns: 1fr; }
+  .sidebar { width: 225px; }
+  .main { margin-left: 225px; }
+}
+@media (max-width: 820px) {
+  .welcome-inner { grid-template-columns: 1fr; padding: 20px 20px 44px; gap: 32px; }
+  .hero-nav { padding: 18px 20px; }
+  .hero-nav-links { display: none; }
+  .sidebar { transform: translateX(-100%); transition: 0.25s; width: 255px; }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .mobile-menu { display: inline-grid; }
+  .topbar { padding: 0 16px; }
+  .content { padding: 20px 16px; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+}
+
+/* ================= REFERENCE-INSPIRED LANDING PAGE ================= */
+.welcome {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 78% 32%, rgba(190, 229, 255, .48) 0%, rgba(226, 243, 255, .2) 34%, transparent 58%),
+    linear-gradient(112deg, #ffffff 0%, #f8fbff 48%, #eaf6ff 100%);
+}
+.hero-nav {
+  max-width: 1660px;
+  padding: 22px clamp(28px, 7.1vw, 132px);
+  position: relative;
+  z-index: 5;
+}
+.hero-logo { gap: 14px; text-decoration: none; }
+.hero-logo-icon {
+  width: 62px; height: 76px; border-radius: 0; background: transparent;
+  display: grid; place-items: center; overflow: visible;
+}
+.hero-logo-icon svg { width: 62px; height: 76px; filter: drop-shadow(0 5px 8px rgba(24, 153, 220, .16)); }
+.hero-logo-name {
+  color: #102b50; font-size: 16px; line-height: 1.2;
+  font-weight: 750; letter-spacing: -.35px;
+}
+.welcome h1.full-product-title {
+  font-size: clamp(40px, 4.05vw, 62px);
+  line-height: 1.08; letter-spacing: -2px;
+  max-width: 790px;
+}
+.login-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 25px; border-radius: 999px;
+  color: #078bd1; background: rgba(224, 242, 255, .75);
+  border: 2px solid #c4e5ff; font-weight: 650; font-size: 17px;
+  box-shadow: 0 4px 16px rgba(54, 155, 220, .06);
+  transition: .2s ease;
+}
+.login-pill:hover { background: #d9efff; transform: translateY(-1px); }
+.login-pill svg { width: 21px; height: 21px; }
+.welcome-inner.landing-inner {
+  max-width: 1660px; min-height: calc(100vh - 120px);
+  margin: 0 auto; padding: 40px clamp(32px, 10.8vw, 198px) 160px;
+  display: flex; align-items: center; position: relative; z-index: 3;
+}
+.landing-copy { max-width: 780px; position: relative; z-index: 4; }
+.welcome .hero-subtitle {
+  padding: 12px 20px; margin: 0 0 28px; border-radius: 999px;
+  font-size: 17px; font-weight: 650; color: #078bd1;
+  background: rgba(218, 239, 255, .9);
+}
+.hero-subtitle b { padding: 0 7px; color: #168fd4; }
+.welcome h1 {
+  color: #102b50; font-size: clamp(44px, 5vw, 78px);
+  line-height: 1.08; letter-spacing: -2.7px; font-weight: 800;
+  margin: 0 0 25px;
+}
+.welcome h1 span {
+  color: #078fd5;
+  background: linear-gradient(90deg, #259de6, #0086c9);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.welcome p {
+  color: #5b708d; font-size: clamp(18px, 1.55vw, 25px);
+  line-height: 1.55; max-width: 650px; font-weight: 450;
+}
+.actions { margin-top: 42px; }
+.btn.landing-cta {
+  min-width: 275px; justify-content: center; padding: 19px 28px;
+  border-radius: 999px; font-size: 20px; font-weight: 700;
+  background: linear-gradient(100deg, #0796d9, #29a9eb);
+  box-shadow: 0 12px 25px rgba(17, 151, 218, .22);
+}
+.btn.landing-cta:hover { background: linear-gradient(100deg, #0788cb, #168fd5); transform: translateY(-2px); }
+.btn.landing-cta span { font-size: 25px; line-height: 1; margin-left: 8px; }
+.landing-art {
+  position: absolute; z-index: 1; width: min(54vw, 850px); height: 690px;
+  right: clamp(12px, 7vw, 130px); top: 100px; pointer-events: none;
+}
+.water-globe {
+  position: absolute; width: min(31vw, 470px); height: auto;
+  right: 18%; top: 12px; filter: drop-shadow(0 18px 24px rgba(51, 166, 225, .13));
+}
+.art-orbit { position: absolute; border: 1px solid rgba(104, 190, 241, .12); border-radius: 50%; }
+.orbit-one { width: 680px; height: 680px; right: 0; top: -190px; }
+.orbit-two { width: 860px; height: 860px; right: -90px; top: -280px; }
+.art-ripples { position: absolute; width: 88%; height: 150px; left: 4%; bottom: 95px; }
+.art-ripples i {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 95%; height: 95px; border: 3px solid rgba(93, 190, 245, .18);
+  border-radius: 50%; box-shadow: 0 8px 14px rgba(77, 176, 233, .08);
+}
+.art-ripples i:nth-child(2) { width: 78%; height: 76px; }
+.art-ripples i:nth-child(3) { width: 60%; height: 57px; }
+.art-ripples i:nth-child(4) { width: 42%; height: 39px; background: rgba(83, 191, 246, .13); }
+.landing-wave {
+  position: absolute; z-index: 2; pointer-events: none; left: -5%; width: 110%;
+  height: 180px; bottom: -74px; border-radius: 48% 52% 0 0 / 30% 42% 0 0;
+  transform: rotate(-2deg);
+}
+.wave-back { background: rgba(202, 233, 255, .58); bottom: -48px; transform: rotate(2deg); }
+.wave-front { background: linear-gradient(180deg, rgba(184, 225, 255, .68), rgba(206, 237, 255, .88)); bottom: -105px; }
+@media (max-width: 900px) {
+  .hero-nav { padding: 16px 26px; }
+  .welcome-inner.landing-inner { min-height: auto; padding: 65px 34px 390px; }
+  .landing-copy { max-width: 680px; }
+  .landing-art { width: 100%; height: 440px; right: -5%; top: auto; bottom: 35px; opacity: .9; }
+  .water-globe { width: 290px; right: 23%; top: -5px; }
+  .art-orbit { display: none; }
+  .art-ripples { bottom: 25px; }
+  .landing-wave { height: 130px; }
+}
+@media (max-width: 560px) {
+  .hero-nav { padding: 14px 18px; }
+  .hero-logo { gap: 8px; }
+  .hero-logo-icon { width: 43px; height: 54px; }
+  .hero-logo-icon svg { width: 43px; height: 54px; }
+  .hero-logo-name { font-size: 14px; }
+  .login-pill { padding: 10px 15px; font-size: 14px; gap: 6px; }
+  .login-pill svg { width: 17px; height: 17px; }
+  .welcome-inner.landing-inner { padding: 56px 22px 330px; }
+  .welcome .hero-subtitle { font-size: 13px; padding: 9px 13px; margin-bottom: 22px; }
+  .welcome h1 { font-size: clamp(39px, 10vw, 52px); letter-spacing: -1.7px; }
+  .welcome h1.full-product-title { font-size: clamp(34px, 8.3vw, 46px); line-height: 1.1; letter-spacing: -1.35px; }
+  .welcome p { font-size: 17px; }
+  .desktop-break { display: none; }
+  .actions { margin-top: 30px; }
+  .btn.landing-cta { min-width: 220px; padding: 15px 22px; font-size: 17px; }
+  .landing-art { height: 350px; bottom: 18px; right: -10%; }
+  .water-globe { width: 230px; right: 20%; }
+  .art-ripples { bottom: 15px; }
+  .landing-wave { height: 100px; }
+}
+
+
+/* ===== AUTHENTICATION AND COMPLAINT WORKSPACE ===== */
+.auth-screen{min-height:100vh;padding:20px clamp(16px,5vw,72px) 24px;background:radial-gradient(circle at 85% 12%,#e2f4ff 0,transparent 34%),linear-gradient(135deg,#fff 0%,#f1f8fd 100%);color:#173653}
+.auth-header{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.auth-back{background:transparent;color:#0789c9;font-weight:700;padding:10px 0}
+.auth-brand{font-weight:800;color:#173653}
+.auth-container{max-width:1050px;margin:5vh auto 0}
+.auth-heading{text-align:center;margin-bottom:28px}
+.auth-eyebrow{display:inline-block;border-radius:30px;padding:8px 14px;background:#e0f2fe;color:#0786c5;font-size:11px;font-weight:800;letter-spacing:1.1px}
+.auth-heading h1{font-size:clamp(32px,4vw,46px);margin:14px 0 8px;letter-spacing:-1.2px}
+.auth-heading p,.auth-muted{color:#6c8094;line-height:1.55}
+.auth-heading p{margin:0}
+.auth-columns{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.auth-card,.auth-modal-card{background:#fff;border:1px solid #dceaf4;border-radius:19px;padding:27px;box-shadow:0 14px 40px rgba(34,105,150,.09)}
+.auth-card-icon{width:43px;height:43px;border-radius:13px;background:#e1f3ff;display:grid;place-items:center;font-size:21px;margin-bottom:15px}
+.auth-card-icon.admin-icon{background:#e9f4ff}
+.auth-card h2,.auth-modal-card h2{margin:0 0 6px;color:#173653;font-size:23px}
+.auth-muted{font-size:13px;margin:0 0 18px}
+.auth-card label,.auth-modal-card label{display:block;font-size:12px;font-weight:750;color:#3c5871;margin:13px 0 6px}
+.auth-card input,.auth-modal-card input{width:100%;padding:12px 13px;border:1px solid #d6e4ef;border-radius:9px;background:#fbfdff;color:#173653;font:inherit;outline:none}
+.auth-card input:focus,.auth-modal-card input:focus{border-color:#4aaee0;box-shadow:0 0 0 3px #e2f4ff}
+.auth-primary{width:100%;border:0;border-radius:10px;margin-top:19px;padding:13px 15px;background:linear-gradient(100deg,#078bcf,#31a8e4);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 7px 17px #078bcf25}
+.auth-primary:hover{filter:brightness(.97)}
+.admin-primary{background:linear-gradient(100deg,#2679b8,#55a8dc)}
+.auth-links{display:flex;justify-content:space-between;gap:9px;flex-wrap:wrap;margin-top:17px}
+.auth-links button,.auth-modal-foot button{border:0;background:none;color:#0788c9;font-size:12px;font-weight:750;padding:3px;cursor:pointer}
+.auth-message{min-height:17px;margin-top:10px;color:#14804b;font-size:12px}
+.auth-message.error{color:#c03945}
+.demo-credentials{margin-top:13px;border-radius:8px;padding:9px 10px;background:#f0f8ff;color:#57728a;font-size:11px}
+.auth-note{text-align:center;color:#8999a8;font-size:11px;margin:24px auto 0;max-width:760px;line-height:1.5}
+.auth-modal{position:fixed;inset:0;z-index:1000;background:#102c4266;display:grid;place-items:center;padding:18px;overflow:auto}
+.auth-modal-card{width:min(100%,460px);position:relative;max-height:92vh;overflow:auto}
+.auth-close{position:absolute;right:16px;top:10px;background:transparent;color:#698096;font-size:27px}
+.auth-modal-foot{text-align:right;margin-top:13px}
+.otp-notice{background:#e9f8f0;color:#16774b;border:1px solid #cceedd;border-radius:9px;padding:11px;font-size:12px;margin:13px 0}
+.complaint-form{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.complaint-form .wide{grid-column:1/-1}
+.complaint-form label{display:block;font-size:12px;font-weight:700;color:#486078;margin-bottom:6px}
+.complaint-form input,.complaint-form select,.complaint-form textarea{box-sizing:border-box;width:100%;padding:11px;border:1px solid #d9e5ee;border-radius:9px;background:#fbfdff;font:inherit}
+.complaint-form textarea{min-height:100px;resize:vertical}
+.complaint-list{display:grid;gap:12px;margin-top:14px}
+.complaint-item{border:1px solid #e0eaf2;border-radius:12px;padding:15px;background:#fff}
+.complaint-item h3{margin:0 0 6px;color:#173653;font-size:15px}
+.complaint-meta{font-size:11px;line-height:1.6;color:#71869a;margin-bottom:8px}
+.complaint-status{display:inline-block;border-radius:20px;padding:5px 9px;background:#e5f3ff;color:#087db8;font-size:10px;font-weight:800}
+.complaint-status.in-progress{background:#fff3d9;color:#946400}.complaint-status.resolved{background:#e4f7ec;color:#16804a}
+.complaint-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.complaint-actions button{border:1px solid #cfe0ed;background:#f4f9fd;color:#087db8;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer}
+@media(max-width:760px){.auth-columns{grid-template-columns:1fr}.auth-container{margin-top:30px}.auth-card{padding:22px}.auth-header{align-items:flex-start}.auth-brand{font-size:12px}}
+@media(max-width:480px){.auth-screen{padding:15px}.auth-brand{max-width:170px;text-align:right}.complaint-form{grid-template-columns:1fr}.complaint-form .wide{grid-column:auto}.auth-links{flex-direction:column;align-items:flex-start}}
+
+</style>
+</head>
+<body>
+
+<!-- ==================== AI-ASSISTED SMART WATER QUALITY MONITORING AND MANAGEMENT SYSTEM - LANDING PAGE ==================== -->
+<section class="welcome" id="welcome">
+  <header class="hero-nav">
+    <a class="hero-logo" href="#" aria-label="AI-Assisted Smart Water Quality Monitoring and Management System home">
+      <span class="hero-logo-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 76" role="img">
+          <path d="M31 3C24 17 8 34 8 48a24 24 0 0 0 48 0C56 34 39 16 31 3Z" fill="#35b9f4"/>
+          <path d="M31 10C24 24 14 36 14 49a18 18 0 0 0 36 0C50 36 39 22 31 10Z" fill="#8de1ff"/>
+          <path d="M17 48c2-10 11-22 17-31-4 15-5 25-2 37 2 8 7 12 12 14-8 6-22 2-27-7-2-4-2-9 0-13Z" fill="#e5faff" opacity=".85"/>
+          <path d="M42 58c8-10 18-9 21-8-2 10-9 19-22 20-4 0-7-1-10-3 4-2 8-5 11-9Z" fill="#57c96a"/>
+        </svg>
+      </span>
+      <span class="hero-logo-name">AI-Assisted Smart Water<br>Quality Monitoring &amp;<br>Management System</span>
+    </a>
+    <button class="login-pill" onclick="startApp()" aria-label="Login">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3m9-8h7a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Login
+    </button>
+  </header>
+
+  <div class="landing-art" aria-hidden="true">
+    <div class="art-orbit orbit-one"></div>
+    <div class="art-orbit orbit-two"></div>
+    <div class="art-ripples"><i></i><i></i><i></i><i></i></div>
+    <svg class="water-globe" viewBox="0 0 420 500">
+      <defs>
+        <linearGradient id="dropFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#dff8ff"/>
+          <stop offset=".48" stop-color="#77d2ff"/>
+          <stop offset="1" stop-color="#16a6e8"/>
+        </linearGradient>
+        <linearGradient id="dropEdge" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#a5eaff"/>
+          <stop offset="1" stop-color="#168fe0"/>
+        </linearGradient>
+        <clipPath id="dropClip"><path d="M210 20C165 116 70 210 70 303a140 140 0 0 0 280 0C350 210 255 116 210 20Z"/></clipPath>
+        <filter id="softShadow"><feGaussianBlur stdDeviation="8"/></filter>
+      </defs>
+      <ellipse cx="210" cy="450" rx="110" ry="13" fill="#75cfff" opacity=".22" filter="url(#softShadow)"/>
+      <path d="M210 20C165 116 70 210 70 303a140 140 0 0 0 280 0C350 210 255 116 210 20Z" fill="url(#dropFill)" stroke="url(#dropEdge)" stroke-width="9"/>
+      <path d="M210 34C173 122 88 216 88 303a122 122 0 0 0 244 0C332 216 247 122 210 34Z" fill="none" stroke="#e8fbff" stroke-width="8" opacity=".75"/>
+      <g clip-path="url(#dropClip)">
+        <circle cx="210" cy="290" r="91" fill="#35b6ef" opacity=".88"/>
+        <path d="M120 265l18-18 15 5 12-13 15 7 12-9 16 9-2 15-12 9-3 15-17 7-8 20-15 8-11-16-4-18-14-8Z" fill="#e6f9ff" opacity=".9"/>
+        <path d="M211 218l17-15 21 5 12 15 17 7-4 19-15 6-6 16-14 3-7 20-14-8-5-22-14-12 3-19-11-15Z" fill="#e6f9ff" opacity=".9"/>
+        <path d="M267 300l20 4 13 15-8 16-18-2-13-13Z" fill="#e6f9ff" opacity=".9"/>
+        <path d="M145 187c37-24 99-29 140-5" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+        <path d="M108 330c48 42 147 55 205 10" fill="none" stroke="#d8f8ff" stroke-width="10" opacity=".35"/>
+      </g>
+      <path d="M148 105c-27 48-49 91-52 137" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" opacity=".65"/>
+      <path d="M287 360c-8 20-22 35-40 45" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+      <path d="M325 370c38-45 79-38 91-35-8 49-43 86-96 81-16-2-29-9-39-20 17-5 32-14 44-26Z" fill="#58ce72"/>
+      <path d="M300 400c-4-35 12-61 30-76" fill="none" stroke="#279d56" stroke-width="4" stroke-linecap="round"/>
+      <path d="M315 405c-5-37-26-50-43-53 0 37 15 64 43 72" fill="#83dc88"/>
+    </svg>
+  </div>
+
+  <div class="welcome-inner landing-inner">
+    <div class="landing-copy">
+      <span class="hero-subtitle">Monitor <b>•</b> Manage <b>•</b> Conserve</span>
+      <h1 class="full-product-title">AI-Assisted<br>Smart Water Quality<br>Monitoring and<br><span>Management System</span></h1>
+      <p>Track water quality, monitor levels,<br class="desktop-break"> and manage resources efficiently.</p>
+      <div class="actions">
+        <button class="btn btn-hero-primary landing-cta" onclick="startApp()">Get Started <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="landing-wave wave-back" aria-hidden="true"></div>
+  <div class="landing-wave wave-front" aria-hidden="true"></div>
+</section>
+
+
+<!-- ================= AUTHENTICATION PORTAL ================= -->
+<section id="authScreen" class="auth-screen" style="display:none">
+  <header class="auth-header">
+    <button class="auth-back" type="button" onclick="backToWelcome()">← Back to home</button>
+    <div class="auth-brand">💧 AI-Assisted Smart Water Management</div>
+  </header>
+  <div class="auth-container">
+    <div class="auth-heading">
+      <span class="auth-eyebrow">SECURE ACCOUNT ACCESS</span>
+      <h1>Welcome back</h1>
+      <p>Choose your account type to access the water quality monitoring system.</p>
+    </div>
+    <div class="auth-columns">
+      <article class="auth-card">
+        <div class="auth-card-icon">👤</div>
+        <h2>User Login</h2>
+        <p class="auth-muted">Monitor water information and submit service complaints.</p>
+        <form onsubmit="event.preventDefault();loginAccount('user')">
+          <label for="userLoginName">Username</label>
+          <input id="userLoginName" required autocomplete="username" placeholder="Enter your username">
+          <label for="userLoginPassword">Password</label>
+          <input id="userLoginPassword" type="password" required autocomplete="current-password" placeholder="Enter your password">
+          <button class="auth-primary" type="submit">Login as User <span>→</span></button>
+        </form>
+        <div class="auth-links">
+          <button type="button" onclick="openAuthForm('user','forgot')">Forgot password?</button>
+          <button type="button" onclick="openAuthForm('user','signup')">Create a new account</button>
+        </div>
+        <div id="userLoginMessage" class="auth-message" aria-live="polite"></div>
+      </article>
+      <article class="auth-card">
+        <div class="auth-card-icon admin-icon">⚙</div>
+        <h2>Admin Login</h2>
+        <p class="auth-muted">Manage monitoring information and review user complaints.</p>
+        <form onsubmit="event.preventDefault();loginAccount('admin')">
+          <label for="adminLoginName">Username</label>
+          <input id="adminLoginName" required autocomplete="username" placeholder="Enter admin username">
+          <label for="adminLoginPassword">Password</label>
+          <input id="adminLoginPassword" type="password" required autocomplete="current-password" placeholder="Enter admin password">
+          <button class="auth-primary admin-primary" type="submit">Login as Admin <span>→</span></button>
+        </form>
+        <div class="auth-links">
+          <button type="button" onclick="openAuthForm('admin','forgot')">Forgot password?</button>
+          <button type="button" onclick="openAuthForm('admin','signup')">Create a new account</button>
+        </div>
+        <div id="adminLoginMessage" class="auth-message" aria-live="polite"></div>
+        <div class="demo-credentials">Demo admin: <b>admin</b> / <b>Admin@123</b></div>
+      </article>
+    </div>
+  </div>
+  <div id="authModal" class="auth-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="auth-modal-card">
+      <button class="auth-close" type="button" onclick="closeAuthForm()" aria-label="Close">×</button>
+      <h2 id="authModalTitle">Create account</h2>
+      <p id="authModalDescription" class="auth-muted"></p>
+      <div id="authSignupForm">
+        <form onsubmit="event.preventDefault();registerAccount()">
+          <label for="signupFullName">Full name</label><input id="signupFullName" required placeholder="Enter your full name">
+          <label for="signupUsername">Username</label><input id="signupUsername" required minlength="3" placeholder="Choose a username">
+          <label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="6" placeholder="At least 6 characters">
+          <label for="signupPhone">Phone number</label><input id="signupPhone" type="tel" required pattern="[0-9+() -]{7,18}" placeholder="Registered mobile number">
+          <button class="auth-primary" type="submit">Create account</button>
+        </form>
+      </div>
+      <div id="authForgotForm" style="display:none">
+        <div id="forgotPhoneStep">
+          <label for="forgotUsername">Username</label><input id="forgotUsername" placeholder="Your account username">
+          <label for="forgotPhone">Registered phone number</label><input id="forgotPhone" type="tel" placeholder="Your mobile number">
+          <button class="auth-primary" type="button" onclick="sendDemoOtp()">Get OTP</button>
+        </div>
+        <div id="forgotOtpStep" style="display:none">
+          <div id="otpDemoNotice" class="otp-notice"></div>
+          <label for="forgotOtp">OTP</label><input id="forgotOtp" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP">
+          <label for="newPassword">New password</label><input id="newPassword" type="password" minlength="6" placeholder="New password">
+          <label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" minlength="6" placeholder="Confirm password">
+          <button class="auth-primary" type="button" onclick="resetAccountPassword()">Verify OTP &amp; reset password</button>
+        </div>
+      </div>
+      <div id="authFormMessage" class="auth-message" aria-live="polite"></div>
+      <div class="auth-modal-foot"><button type="button" onclick="closeAuthForm()">Back to login</button></div>
+    </div>
+  </div>
+  <p class="auth-note">Prototype mode: accounts and complaints are stored in this browser. Real SMS OTP and shared multi-user access require the backend.</p>
+</section>
+
+<!-- ==================== EXPANDED SMART WATER DASHBOARD WORKSPACE ==================== -->
+<div id="app" style="display:none">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">💧</div>
+      <div>
+        <strong>HydroWise</strong>
+        <small>Water Quality & IoT</small>
+      </div>
+    </div>
+
+    <div class="nav-label">Core Monitoring</div>
+    <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span>Overview Dashboard</button>
+    <button class="nav-item" data-page="quality"><span class="nav-icon">🧪</span>Water Quality Lab</button>
+    <button class="nav-item" data-page="aiQuality"><span class="nav-icon">🧠</span>AI Water Quality <span class="nav-badge-ai">AI</span></button>
+    <button class="nav-item" data-page="consumption"><span class="nav-icon">📊</span>Usage & Consumption</button>
+
+    <div class="nav-label">Infrastructure & Control</div>
+    <button class="nav-item" data-page="tank"><span class="nav-icon">🗄️</span>Tank & Pump Control</button>
+    <button class="nav-item" data-page="filtration"><span class="nav-icon">🌊</span>Filtration & RO Health</button>
+    <button class="nav-item" data-page="leakage"><span class="nav-icon">🛡️</span>Leakage Detection</button>
+    <button class="nav-item" data-page="distribution"><span class="nav-icon">🔀</span>Distribution Zones</button>
+
+    <div class="nav-label">Sustainability & Ops</div>
+    <button class="nav-item" data-page="rainwater"><span class="nav-icon">🌧️</span>Rainwater Harvesting</button>
+    <button class="nav-item" data-page="sensors"><span class="nav-icon">📡</span>IoT Sensor Nodes</button>
+    <button class="nav-item" data-page="alerts"><span class="nav-icon">🔔</span>Alerts & Logs <span class="nav-count" id="alertCount">2</span></button>
+    <button class="nav-item" data-page="reports"><span class="nav-icon">📄</span>Reports & Export</button>
+
+    <div class="nav-label" style="margin-top:auto">Navigation</div>
+    <button class="nav-item" onclick="backToWelcome()"><span class="nav-icon">↩</span>Back to Home</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left">
+        <button class="icon-btn mobile-menu" onclick="toggleMenu()">☰</button>
+        <div>
+          <h2 id="topTitle">Overview Dashboard</h2>
+          <small>Water quality & conservation monitoring</small>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="demo-pill">● DEMO TELEMETRY</span>
+        <button class="icon-btn" onclick="navigate('aiQuality')" title="AI Water Quality">🧠</button>
+        <button class="icon-btn" onclick="navigate('alerts')" title="Alerts">🔔</button>
+        <div class="avatar">HW</div>
+      </div>
+    </header>
+    <div class="content" id="pageContent"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+
+const state = {
+  tank: 68,
+  capacity: 5000,
+  leak: false,
+  pump: true,
+  rainHarvestActive: true,
+  rainTank: 74,
+  sourceFilter: 'Main Reservoir',
+  filters: [
+    { name: 'Sediment Pre-Filter', life: 84, status: 'Optimal', lastReplaced: '2026-09-12' },
+    { name: 'Activated Carbon Block', life: 68, status: 'Optimal', lastReplaced: '2026-08-20' },
+    { name: 'RO Membrane Unit', life: 41, status: 'Warning', lastReplaced: '2026-05-04' },
+    { name: 'UV Sterilization Lamp', life: 92, status: 'Optimal', lastReplaced: '2026-10-01' }
+  ],
+  zones: [
+    { name: 'Zone A — Residential Block', allocated: 4500, used: 4210, pressure: '2.8 bar', valve: 'Open', status: 'Normal' },
+    { name: 'Zone B — Academic & Labs', allocated: 3800, used: 3490, pressure: '2.6 bar', valve: 'Open', status: 'Normal' },
+    { name: 'Zone C — Hostel & Mess', allocated: 5200, used: 5080, pressure: '2.3 bar', valve: 'Open', status: 'Warning' }
+  ],
+  quality: {
+    ph: 7.2,
+    tds: 245,
+    turbidity: 0.9,
+    do: 7.4,
+    chlorine: 0.4,
+    hardness: 135,
+    temp: 24.2,
+    ec: 490
+  },
+  aiModelInput: {
+    ph: 7.2,
+    tds: 245,
+    turbidity: 0.9,
+    do: 7.4,
+    chlorine: 0.4,
+    hardness: 135,
+    conductivity: 490
+  },
+  alerts: [
+    { type: 'Info', title: 'Water Quality Index Optimal (94/100)', desc: 'pH, TDS, and Turbidity at Main Reservoir meet BIS IS 10500 standards.', time: '10 mins ago', read: false },
+    { type: 'Warning', title: 'RO Membrane at 41% remaining life', desc: 'Schedule membrane flushing or replacement within 30 days.', time: 'Today, 09:15 AM', read: false }
+  ],
+  sensors: [
+    { id: 'WQ-101', name: 'Multi-Parameter pH/TDS Probe', type: 'Water Quality', location: 'Main Reservoir', battery: 96, status: 'Online' },
+    { id: 'WQ-102', name: 'Optical Turbidity & Chlorine Sensor', type: 'Water Quality', location: 'Filtration Outlet', battery: 88, status: 'Online' },
+    { id: 'FL-201', name: 'Ultrasonic Flow Meter', type: 'Leak & Flow', location: 'Supply Pipeline A', battery: 82, status: 'Online' },
+    { id: 'LV-301', name: 'Hydrostatic Level Transmitter', type: 'Tank Level', location: 'Overhead Tank', battery: 79, status: 'Online' },
+    { id: 'RN-401', name: 'Rainwater Sump Level Node', type: 'Harvesting', location: 'Underground Sump', battery: 91, status: 'Online' }
+  ]
+};
+
+const titles = {
+  dashboard: 'Overview Dashboard',
+  quality: 'Water Quality Lab & Safety Analysis',
+  aiQuality: 'AI Water Quality Classifier & Diagnostics',
+  consumption: 'Water Usage & Consumption',
+  tank: 'Tank & Pump Control',
+  filtration: 'Filtration & RO Unit Health',
+  leakage: 'Pipeline Leakage Detection',
+  distribution: 'Smart Distribution Zones',
+  rainwater: 'Rainwater Harvesting & Greywater Reuse',
+  sensors: 'IoT Sensor Nodes',
+  alerts: 'Alerts & System Logs',
+  reports: 'Reports & Data Export'
+};
+
+let charts = {};
+
+function startApp() {
+  $('#welcome').style.display = 'none';
+  $('#app').style.display = 'none';
+  $('#authScreen').style.display = 'block';
+  closeAuthForm();
+  clearLoginMessages();
+}
+
+function startWithPage(page) {
+  $('#welcome').style.display = 'none';
+  $('#app').style.display = 'block';
+  navigate(page);
+}
+
+function backToWelcome() {
+  $('#app').style.display = 'none';
+  $('#authScreen').style.display = 'none';
+  $('#welcome').style.display = 'flex';
+}
+
+function showWelcomeInfo(which) {
+  const msg = which === 'quality'
+    ? 'Tracks pH (6.5–8.5), TDS (<500 ppm), Turbidity (<5 NTU), Residual Chlorine, Hardness & Dissolved Oxygen.'
+    : 'IoT probes capture water quality & flow readings → AI model classifies potability & recommends treatment → Alerts prevent wastage.';
+  toast(msg, 4200);
+}
+
+function toggleMenu() { $('#sidebar').classList.toggle('open'); }
+
+function toast(msg, duration = 2800) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function navigate(page) {
+  document.querySelectorAll('.nav-item[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+  $('#topTitle').textContent = titles[page] || 'Dashboard';
+  $('#pageContent').innerHTML = pages[page]();
+  $('#sidebar').classList.remove('open');
+  drawCharts(page);
+  updateAlertCount();
+}
+
+function updateAlertCount() {
+  const n = state.alerts.filter(a => !a.read).length;
+  $('#alertCount').textContent = n;
+  $('#alertCount').style.display = n ? '' : 'none';
+}
+
+function addAlert(type, title, desc) {
+  state.alerts.unshift({ type, title, desc, time: 'Just now', read: false });
+  updateAlertCount();
+}
+
+function badge(text) {
+  const c = ['Online', 'Normal', 'Safe', 'Potable', 'Optimal', 'Open', 'Active'].includes(text) ? 'ok'
+    : ['Warning', 'Moderate', 'Check', 'Treatment Needed'].includes(text) ? 'warn' : 'bad';
+  return `<span class="status ${c}">${text}</span>`;
+}
+
+function computeWQI(q = state.quality) {
+  let score = 100;
+  if (q.ph < 6.5 || q.ph > 8.5) score -= 28;
+  else if (q.ph < 6.8 || q.ph > 8.0) score -= 8;
+
+  if (q.tds > 500) score -= 25;
+  else if (q.tds > 350) score -= 7;
+
+  if (q.turbidity > 5) score -= 30;
+  else if (q.turbidity > 2) score -= 10;
+
+  if (q.chlorine < 0.2 || q.chlorine > 1.0) score -= 12;
+  if (q.do < 5.0) score -= 15;
+
+  return Math.max(15, Math.min(99, Math.round(score)));
+}
+
+function getWaterVerdict(wqi) {
+  if (wqi >= 85) return { label: 'Potable & Safe', status: 'Safe', advice: 'Water meets drinking & domestic safety standards.' };
+  if (wqi >= 65) return { label: 'Acceptable (Filter Recommended)', status: 'Warning', advice: 'Suitable for domestic use; RO/UV filtration advised before drinking.' };
+  return { label: 'Unsafe / Contaminated', status: 'Critical', advice: 'Do not consume. Flush tank and inspect filtration unit immediately.' };
+}
+
+/* ==================== REALISTIC AI WATER QUALITY INFERENCE ENGINE ==================== */
+function runAIWaterQualityModel(inp) {
+  // Standardized feature deviations from ideal BIS IS 10500 potable centroid
+  const zPh = Math.abs(inp.ph - 7.2) / 0.65;
+  const zTds = Math.max(0, (inp.tds - 250) / 180);
+  const zTurb = Math.max(0, (inp.turbidity - 1.0) / 2.2);
+  const zDo = Math.max(0, (7.0 - inp.do) / 1.8);
+  const zCl = inp.chlorine < 0.2 ? (0.2 - inp.chlorine) / 0.15 : Math.max(0, (inp.chlorine - 0.8) / 0.4);
+  const zHard = Math.max(0, (inp.hardness - 180) / 120);
+
+  // Weighted logistic regression / neural scoring logits for 3 water quality classes
+  const riskScore = (zPh * 1.45) + (zTds * 1.35) + (zTurb * 1.85) + (zDo * 1.1) + (zCl * 0.95) + (zHard * 0.65);
+
+  const logitSafe = 4.2 - (riskScore * 1.65);
+  const logitTreat = 1.4 + (riskScore * 0.55) - Math.pow(Math.max(0, riskScore - 3.2), 1.5);
+  const logitUnsafe = -3.8 + (riskScore * 1.35);
+
+  const maxLogit = Math.max(logitSafe, logitTreat, logitUnsafe);
+  const expSafe = Math.exp(logitSafe - maxLogit);
+  const expTreat = Math.exp(logitTreat - maxLogit);
+  const expUnsafe = Math.exp(logitUnsafe - maxLogit);
+  const sumExp = expSafe + expTreat + expUnsafe;
+
+  const probSafe = Math.round((expSafe / sumExp) * 100);
+  const probTreat = Math.round((expTreat / sumExp) * 100);
+  const probUnsafe = Math.max(0, 100 - probSafe - probTreat);
+
+  // Feature contribution analysis (explainable AI)
+  const contributions = [
+    { feature: 'Turbidity (' + inp.turbidity + ' NTU)', impact: Math.round(zTurb * 32) },
+    { feature: 'pH Balance (' + inp.ph + ')', impact: Math.round(zPh * 26) },
+    { feature: 'TDS Level (' + inp.tds + ' ppm)', impact: Math.round(zTds * 24) },
+    { feature: 'Dissolved O₂ (' + inp.do + ' mg/L)', impact: Math.round(zDo * 18) },
+    { feature: 'Chlorine (' + inp.chlorine + ' mg/L)', impact: Math.round(zCl * 14) }
+  ].sort((a, b) => b.impact - a.impact);
+
+  // Automated treatment & action plan
+  const actions = [];
+  if (inp.turbidity > 3.0) actions.push('Activate Sediment & Multi-Grade Sand Backwash (High suspended solids detected).');
+  if (inp.tds > 450) actions.push('Route water through Reverse Osmosis (RO) stage to reduce dissolved salts below 300 ppm.');
+  if (inp.ph < 6.5) actions.push('Dose alkaline calcite media to raise acidic pH into the 6.8–7.8 neutral zone.');
+  if (inp.ph > 8.5) actions.push('High alkalinity detected: inspect mineral dosing and blend with RO permeate.');
+  if (inp.chlorine < 0.2) actions.push('Enable UV disinfection or micro-chlorination to prevent microbial regrowth in storage.');
+  if (inp.do < 5.5) actions.push('Run tank aerator pump for 20 minutes to restore dissolved oxygen levels.');
+  if (actions.length === 0) actions.push('No corrective treatment required. Water is safe for direct drinking and distribution.');
+
+  let classification = 'Potable & Safe';
+  let statusBadge = 'Potable';
+  let confidence = probSafe;
+
+  if (probUnsafe >= probSafe && probUnsafe >= probTreat) {
+    classification = 'Contaminated / Unsafe';
+    statusBadge = 'Critical';
+    confidence = probUnsafe;
+  } else if (probTreat > probSafe) {
+    classification = 'Requires Filtration / Treatment';
+    statusBadge = 'Treatment Needed';
+    confidence = probTreat;
+  }
+
+  // Next 6-hour AI forecasted WQI
+  const currentWqi = computeWQI(inp);
+  const drift = riskScore > 2.2 ? -2.5 : 0.4;
+  const forecastWqi = [
+    currentWqi,
+    Math.max(15, Math.min(99, Math.round(currentWqi + drift))),
+    Math.max(15, Math.min(99, Math.round(currentWqi + drift * 1.8))),
+    Math.max(15, Math.min(99, Math.round(currentWqi + drift * 2.4))),
+    Math.max(15, Math.min(99, Math.round(currentWqi + drift * 2.9))),
+    Math.max(15, Math.min(99, Math.round(currentWqi + drift * 3.3)))
+  ];
+
+  return {
+    classification,
+    statusBadge,
+    confidence,
+    probs: { safe: probSafe, treat: probTreat, unsafe: probUnsafe },
+    contributions,
+    actions,
+    forecastWqi,
+    wqi: currentWqi
+  };
+}
+
+function pageHead(title, sub) {
+  return `<div class="page-head"><div><h1>${title}</h1><p>${sub}</p></div><div class="demo-pill">● SIMULATED SENSOR DATA</div></div>`;
+}
+
+function kpi(icon, value, label, trend, tint) {
+  return `<div class="card kpi" style="--tint:${tint}"><div class="kpi-top"><div class="kpi-icon">${icon}</div><span class="trend">${trend}</span></div><div class="kpi-value">${value}</div><div class="kpi-label">${label}</div></div>`;
+}
+
+function chartCard(title, id, cls = '') {
+  return `<div class="card"><div class="section-title">${title}</div><div class="chart-wrap ${cls}"><canvas id="${id}"></canvas></div></div>`;
+}
+
+const pages = {
+  dashboard: () => {
+    const wqi = computeWQI();
+    const verdict = getWaterVerdict(wqi);
+    const aiRes = runAIWaterQualityModel(state.quality);
+    return `${pageHead('System Overview', 'Live water quality index, AI safety classification, storage status, and consumption telemetry.')}
+    <div class="grid kpis">
+      ${kpi('🧪', wqi + '/100', 'Water Quality Index', badge(verdict.status), '#e0f2fe')}
+      ${kpi('🧠', aiRes.confidence + '%', 'AI Potability Confidence', badge(aiRes.statusBadge), '#dbeafe')}
+      ${kpi('⚗️', state.quality.ph + ' pH', 'pH Balance (6.5–8.5)', badge(state.quality.ph >= 6.5 && state.quality.ph <= 8.5 ? 'Optimal' : 'Warning'), '#ccfbf1')}
+      ${kpi('💧', state.quality.tds + ' ppm', 'Total Dissolved Solids', badge(state.quality.tds <= 500 ? 'Safe' : 'Warning'), '#e0f2fe')}
+      ${kpi('🗄️', state.tank + '%', 'Main Tank Storage', '● ' + Math.round(state.capacity * state.tank / 100).toLocaleString() + ' L', '#e0f2fe')}
+      ${kpi('🌧️', state.rainTank + '%', 'Rainwater Sump Reserve', '↑ 640 L harvested', '#d1fae5')}
+      ${kpi('🛡️', state.leak ? 'Alert' : 'Secure', 'Pipeline Integrity', badge(state.leak ? 'Critical' : 'Normal'), state.leak ? '#ffe4e6' : '#d1fae5')}
+      ${kpi('📡', state.sensors.filter(s => s.status === 'Online').length + '/' + state.sensors.length, 'Active IoT Nodes', '● Connected', '#e0f2fe')}
+    </div>
+
+    <div class="grid section-grid">
+      ${chartCard('24-Hour Water Quality & pH Stability', 'overviewQualityChart')}
+      <div class="card">
+        <div class="section-title">Water Potability & System Health</div>
+        <div class="metric-list">
+          <div class="metric"><strong>${verdict.label.split(' ')[0]}</strong><small>Safety Grade</small></div>
+          <div class="metric"><strong>${state.quality.chlorine} mg/L</strong><small>Free Chlorine</small></div>
+          <div class="metric"><strong>${state.quality.do} mg/L</strong><small>Dissolved O₂</small></div>
+        </div>
+        <div style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:7px"><b>Main Reservoir Tank</b><b>${state.tank}%</b></div>
+          <div class="bar"><span style="width:${state.tank}%"></span></div>
+        </div>
+        <div class="notice ${wqi >= 85 ? 'blue' : 'red'}">💡 <b>AI Assessment:</b> ${verdict.advice}</div>
+        <div class="action-row">
+          <button class="small-btn primary" onclick="navigate('aiQuality')">Open AI Water Quality</button>
+          <button class="small-btn soft" onclick="navigate('quality')">Water Quality Lab</button>
+          <button class="small-btn soft" onclick="navigate('tank')">Manage Tank</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid section-grid">
+      ${chartCard('Weekly Water Consumption (Litres)', 'overviewChart', 'short')}
+      <div class="card">
+        <div class="section-title">Recent Telemetry Events</div>
+        ${state.alerts.slice(0, 3).map(a => `
+          <div class="alert-row">
+            <span class="alert-dot" style="background:${a.type === 'Critical' ? '#e11d48' : a.type === 'Warning' ? '#d97706' : '#0284c7'}"></span>
+            <div><strong>${a.title}</strong><p>${a.desc}</p><small>${a.time}</small></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  },
+
+  aiQuality: () => {
+    const inp = state.aiModelInput;
+    const res = runAIWaterQualityModel(inp);
+    return `${pageHead('AI Water Quality Classifier & Diagnostics', 'Real-time machine learning inference predicting potability probability, risk factors, and treatment actions.')}
+    
+    <div class="grid kpis">
+      ${kpi('🧠', res.classification.split(' ')[0], 'AI Safety Prediction', badge(res.statusBadge), '#dbeafe')}
+      ${kpi('🎯', res.confidence + '%', 'Model Confidence Score', 'Multi-feature classifier', '#e0f2fe')}
+      ${kpi('🧪', res.wqi + '/100', 'Computed WQI Score', 'BIS IS 10500 weighted', '#ccfbf1')}
+      ${kpi('🔮', res.forecastWqi[5] + '/100', '6-Hour Predicted WQI', res.forecastWqi[5] >= res.wqi ? 'Stable outlook' : '↓ Drift warning', '#f1f5f9')}
+    </div>
+
+    <div class="grid section-grid">
+      <div class="card">
+        <div class="section-title">
+          <span>Interactive AI Water Sample Analyzer</span>
+          <span class="ai-chip">Model v2.4 • Live Inference</span>
+        </div>
+        <p class="muted" style="font-size:12.5px;margin-top:0">Adjust sensor inputs or load a sample preset to run instant AI potability classification and treatment synthesis.</p>
+
+        <div class="action-row" style="margin-bottom:14px">
+          <button class="small-btn soft" onclick="syncAIFromSensors()">Sync Live Reservoir Sensors</button>
+          <button class="small-btn soft" onclick="loadAIPreset('hard')">Test Hard Borewell Sample</button>
+          <button class="small-btn soft" onclick="loadAIPreset('contaminated')">Test Rainwater Runoff Spike</button>
+          <button class="small-btn success" onclick="loadAIPreset('pure')">Test RO Treated Sample</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+          <div class="field">
+            <label>pH Level: <b>${inp.ph}</b> (Safe: 6.5–8.5)</label>
+            <input type="range" min="4.5" max="9.5" step="0.1" value="${inp.ph}" oninput="updateAIInput('ph', +this.value)">
+          </div>
+          <div class="field">
+            <label>TDS: <b>${inp.tds} ppm</b> (Safe: &lt;500)</label>
+            <input type="range" min="40" max="900" step="10" value="${inp.tds}" oninput="updateAIInput('tds', +this.value)">
+          </div>
+          <div class="field">
+            <label>Turbidity: <b>${inp.turbidity} NTU</b> (Safe: &lt;5.0)</label>
+            <input type="range" min="0.1" max="9.0" step="0.1" value="${inp.turbidity}" oninput="updateAIInput('turbidity', +this.value)">
+          </div>
+          <div class="field">
+            <label>Dissolved Oxygen: <b>${inp.do} mg/L</b> (Safe: &gt;6.0)</label>
+            <input type="range" min="2.0" max="11.0" step="0.2" value="${inp.do}" oninput="updateAIInput('do', +this.value)">
+          </div>
+          <div class="field">
+            <label>Residual Chlorine: <b>${inp.chlorine} mg/L</b> (Safe: 0.2–1.0)</label>
+            <input type="range" min="0.0" max="1.6" step="0.05" value="${inp.chlorine}" oninput="updateAIInput('chlorine', +this.value)">
+          </div>
+          <div class="field">
+            <label>Total Hardness: <b>${inp.hardness} mg/L</b> (Safe: &lt;200)</label>
+            <input type="range" min="30" max="450" step="5" value="${inp.hardness}" oninput="updateAIInput('hardness', +this.value)">
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="small-btn primary" onclick="applyAIToLiveSystem()">Apply Sample to Live Dashboard & Log Alert</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">AI Classification Probabilities</div>
+        
+        <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600">
+          <span>Potable & Safe for Drinking</span><span>${res.probs.safe}%</span>
+        </div>
+        <div class="ai-prob-bar"><div class="ai-prob-fill" style="width:${res.probs.safe}%;background:#059669"></div></div>
+
+        <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600">
+          <span>Requires Filtration / Treatment</span><span>${res.probs.treat}%</span>
+        </div>
+        <div class="ai-prob-bar"><div class="ai-prob-fill" style="width:${res.probs.treat}%;background:#d97706"></div></div>
+
+        <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600">
+          <span>Contaminated / Unsafe</span><span>${res.probs.unsafe}%</span>
+        </div>
+        <div class="ai-prob-bar"><div class="ai-prob-fill" style="width:${res.probs.unsafe}%;background:#e11d48"></div></div>
+
+        <div class="section-title" style="margin-top:18px;margin-bottom:8px;font-size:13.5px">AI-Recommended Treatment Protocol</div>
+        ${res.actions.map(act => `
+          <div class="alert-row" style="padding:8px 0">
+            <span class="alert-dot" style="background:${res.statusBadge==='Potable'?'#059669':'#0284c7'}"></span>
+            <div style="font-size:12.5px;color:var(--text)">${act}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="grid section-grid">
+      ${chartCard('AI 6-Hour Water Quality Index Trajectory', 'aiWqiForecastChart', 'short')}
+      ${chartCard('Explainable AI: Risk Factor Contribution (%)', 'aiFeatureChart', 'short')}
+    </div>`;
+  },
+
+  quality: () => {
+    const q = state.quality;
+    const wqi = computeWQI();
+    const verdict = getWaterVerdict(wqi);
+    const params = [
+      { name: 'pH Level', val: q.ph, unit: 'pH', range: '6.5 – 8.5', pct: Math.min(100, Math.max(5, ((q.ph - 4) / 6) * 100)), ok: q.ph >= 6.5 && q.ph <= 8.5 },
+      { name: 'Total Dissolved Solids (TDS)', val: q.tds, unit: 'ppm', range: '< 500 ppm', pct: Math.min(100, Math.max(5, (q.tds / 800) * 100)), ok: q.tds <= 500 },
+      { name: 'Turbidity', val: q.turbidity, unit: 'NTU', range: '< 5.0 NTU', pct: Math.min(100, Math.max(5, (q.turbidity / 8) * 100)), ok: q.turbidity <= 5 },
+      { name: 'Dissolved Oxygen (DO)', val: q.do, unit: 'mg/L', range: '> 6.0 mg/L', pct: Math.min(100, Math.max(5, (q.do / 12) * 100)), ok: q.do >= 6.0 },
+      { name: 'Residual Chlorine', val: q.chlorine, unit: 'mg/L', range: '0.2 – 1.0 mg/L', pct: Math.min(100, Math.max(5, (q.chlorine / 1.5) * 100)), ok: q.chlorine >= 0.2 && q.chlorine <= 1.0 },
+      { name: 'Total Hardness (CaCO₃)', val: q.hardness, unit: 'mg/L', range: '< 200 mg/L', pct: Math.min(100, Math.max(5, (q.hardness / 350) * 100)), ok: q.hardness <= 200 }
+    ];
+
+    return `${pageHead('Water Quality Lab & Safety Analysis', 'Monitor physicochemical water parameters against BIS / WHO drinking water standards.')}
+    <div class="card" style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:54px;height:54px;border-radius:14px;background:#e0f2fe;color:#0284c7;display:grid;place-items:center;font-size:21px;font-weight:700">${wqi}</div>
+        <div>
+          <div style="font-size:15.5px;font-weight:700">Overall Water Quality Index: ${verdict.label}</div>
+          <div style="font-size:12.5px;color:var(--muted)">Sampling Point: <b>${state.sourceFilter}</b> • Temp: ${q.temp}°C • Conductivity: ${q.ec} µS/cm</div>
+        </div>
+      </div>
+      <div class="action-row" style="margin:0">
+        <select onchange="switchWaterSource(this.value)" style="padding:9px 12px;border-radius:9px;border:1px solid var(--border);font-size:12.5px;font-weight:600">
+          <option ${state.sourceFilter==='Main Reservoir'?'selected':''}>Main Reservoir</option>
+          <option ${state.sourceFilter==='RO Filtration Outlet'?'selected':''}>RO Filtration Outlet</option>
+          <option ${state.sourceFilter==='Overhead Tank'?'selected':''}>Overhead Tank</option>
+        </select>
+        <button class="small-btn primary" onclick="navigate('aiQuality')">Run AI Diagnostics</button>
+        <button class="small-btn soft" onclick="simulateContamination()">Simulate Turbidity Spike</button>
+        <button class="small-btn success" onclick="resetQuality()">Restore Normal</button>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:18px">
+      ${params.map(p => `
+        <div class="wq-param-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12.5px;font-weight:600;color:var(--text-secondary)">${p.name}</span>
+            ${badge(p.ok ? 'Safe' : 'Warning')}
+          </div>
+          <div style="font-size:23px;font-weight:700;margin:8px 0 2px">${p.val} <span style="font-size:13px;font-weight:500;color:var(--muted)">${p.unit}</span></div>
+          <div class="wq-range-bar"><div class="wq-marker" style="left:${p.pct}%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+            <span>Safe Limit: ${p.range}</span>
+            <span>${p.ok ? 'Within Range' : 'Action Needed'}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="grid section-grid">
+      ${chartCard('Multi-Parameter Quality Trend (Last 7 Readings)', 'qualityChart')}
+      <div class="card">
+        <div class="section-title">Interactive Sensor Calibration Simulator</div>
+        <p class="muted" style="font-size:12.5px;margin-top:0">Test how changes in pH, TDS, or Turbidity affect the Water Quality Index and safety status.</p>
+        <div class="field">
+          <label>Adjust pH Level (${q.ph})</label>
+          <input type="range" min="4.5" max="9.5" step="0.1" value="${q.ph}" oninput="updateQualityParam('ph', +this.value)">
+        </div>
+        <div class="field">
+          <label>Adjust TDS (${q.tds} ppm)</label>
+          <input type="range" min="50" max="800" step="5" value="${q.tds}" oninput="updateQualityParam('tds', +this.value)">
+        </div>
+        <div class="field">
+          <label>Adjust Turbidity (${q.turbidity} NTU)</label>
+          <input type="range" min="0.2" max="8.0" step="0.1" value="${q.turbidity}" oninput="updateQualityParam('turbidity', +this.value)">
+        </div>
+      </div>
+    </div>`;
+  },
+
+  consumption: () => `${pageHead('Water Usage & Consumption', 'Track daily, weekly, and sector-wise water demand.')}
+    <div class="grid kpis">
+      ${kpi('💧', '3,420 L', 'Today’s Usage', '↓ 2.1%', '#e0f2fe')}
+      ${kpi('📊', '24,850 L', 'This Week', '↑ 4.2%', '#ccfbf1')}
+      ${kpi('📅', '98,400 L', 'This Month', '↓ 3.4%', '#d1fae5')}
+      ${kpi('⏰', '11:00 AM', 'Peak Demand Window', 'Typical', '#f1f5f9')}
+    </div>
+    <div class="grid section-grid">
+      ${chartCard('Daily Consumption Trend (Litres)', 'consumptionChart')}
+      ${chartCard('Usage Breakdown by Zone', 'sectorChart')}
+    </div>`,
+
+  tank: () => `${pageHead('Tank & Pump Control', 'Monitor overhead storage levels and automated pump cutoff.')}
+    <div class="grid section-grid">
+      <div class="card">
+        <div class="section-title">Main Overhead Storage Tank</div>
+        <div class="tank-row">
+          <div class="tank-visual"><div class="tank-fill" id="tankFill" style="height:${state.tank}%"></div></div>
+          <div class="tank-info">
+            <h2>${state.tank}%</h2>
+            <p>${Math.round(state.capacity * state.tank / 100).toLocaleString()} L available of ${state.capacity.toLocaleString()} L capacity</p>
+            ${badge(state.tank < 25 ? 'Warning' : 'Normal')}
+            <p style="margin-top:14px">Auto-Fill Pump: <b>${state.pump ? 'RUNNING (ON)' : 'STANDBY (OFF)'}</b></p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Storage & Pump Controls</div>
+        <div class="field">
+          <label>Simulate Tank Level (%)</label>
+          <input id="tankRange" type="range" min="0" max="100" value="${state.tank}" oninput="previewTank(this.value)">
+        </div>
+        <div class="field">
+          <label>Total Tank Capacity (Litres)</label>
+          <input id="capacity" type="number" min="100" value="${state.capacity}">
+        </div>
+        <div class="action-row">
+          <button class="small-btn primary" onclick="saveTank()">Apply Settings</button>
+          <button class="small-btn soft" onclick="togglePump()">Turn Pump ${state.pump ? 'OFF' : 'ON'}</button>
+          <button class="small-btn soft" onclick="changeTank(10)">+10%</button>
+          <button class="small-btn soft" onclick="changeTank(-10)">-10%</button>
+        </div>
+        <div class="notice blue">Automation Rule: Pump activates automatically below 25% and stops at 90% to prevent overflow.</div>
+      </div>
+    </div>`,
+
+  filtration: () => `${pageHead('Filtration & RO Unit Health', 'Monitor cartridge lifespan, UV sterilization status, and backwash cycles.')}
+    <div class="grid kpis">
+      ${kpi('🌊', '96.4%', 'TDS Rejection Rate', 'Optimal RO efficiency', '#e0f2fe')}
+      ${kpi('💡', 'Active', 'UV Sterilizer Chamber', badge('Online'), '#d1fae5')}
+      ${kpi('⏱️', '14 Days', 'Next Scheduled Backwash', 'Auto-timer enabled', '#ccfbf1')}
+      ${kpi('🔧', '1 Cartridge', 'Maintenance Advisory', badge('Warning'), '#fef3c7')}
+    </div>
+    <div class="card">
+      <div class="section-title">Treatment Stage Diagnostics & Cartridge Lifespan</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Filtration Stage</th><th>Remaining Life</th><th>Health Bar</th><th>Last Replaced</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            ${state.filters.map((f, i) => `
+              <tr>
+                <td><b>${f.name}</b></td>
+                <td>${f.life}%</td>
+                <td style="width:180px"><div class="bar"><span style="width:${f.life}%;background:${f.life < 50 ? '#d97706' : '#0284c7'}"></span></div></td>
+                <td>${f.lastReplaced}</td>
+                <td>${badge(f.status)}</td>
+                <td><button class="small-btn soft" onclick="resetFilter(${i})">Reset / Replace</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="action-row">
+        <button class="small-btn primary" onclick="runBackwash()">Start Automated Backwash Cycle</button>
+      </div>
+    </div>`,
+
+  leakage: () => `${pageHead('Pipeline Leakage Detection', 'Monitor flow rate anomalies and isolate valves immediately.')}
+    <div class="grid section-grid">
+      <div class="card">
+        <div class="section-title">Live Pipeline Flow Topology</div>
+        <div class="pipeline">
+          <div class="pipe-node">🚰</div>
+          <div class="pipe-segment"></div>
+          <div class="pipe-node">📡</div>
+          <div class="pipe-segment" style="${state.leak ? 'background:#e11d48' : ''}"></div>
+          <div class="pipe-node">${state.leak ? '⚠️' : '🏠'}</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+          <span>Reservoir Outlet</span><span>Ultrasonic Flow Node</span><span>Distribution Line</span>
+        </div>
+        <div class="notice ${state.leak ? 'red' : 'blue'}">
+          ${state.leak ? '⚠️ Abnormal flow surge detected on Supply Pipeline A! Isolate valve immediately.' : '✓ Flow pressure and velocity are balanced. No leakage detected.'}
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Flow Diagnostics & Valve Control</div>
+        <div class="metric-list">
+          <div class="metric"><strong>${state.leak ? '18.4' : '12.0'} L/m</strong><small>Flow Rate</small></div>
+          <div class="metric"><strong>${state.leak ? 'High' : 'None'}</strong><small>Leak Risk</small></div>
+          <div class="metric"><strong>${state.leak ? '110' : '0'} L/h</strong><small>Est. Loss</small></div>
+        </div>
+        <div class="action-row">
+          <button class="small-btn danger" onclick="testLeak()">Simulate Pipe Leak</button>
+          <button class="small-btn success" onclick="closeValve()">Isolate Valve & Reset</button>
+        </div>
+      </div>
+    </div>`,
+
+  distribution: () => `${pageHead('Smart Distribution Zones', 'Control motorized zone valves, monitor line pressure, and balance daily water quotas.')}
+    <div class="card">
+      <div class="section-title">Zone Allocation & Solenoid Valve Control</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Distribution Zone</th><th>Daily Quota</th><th>Consumed Today</th><th>Line Pressure</th><th>Valve State</th><th>Status</th><th>Control</th></tr></thead>
+          <tbody>
+            ${state.zones.map((z, i) => `
+              <tr>
+                <td><b>${z.name}</b></td>
+                <td>${z.allocated.toLocaleString()} L</td>
+                <td>${z.used.toLocaleString()} L</td>
+                <td>${z.pressure}</td>
+                <td>${badge(z.valve)}</td>
+                <td>${badge(z.status)}</td>
+                <td><button class="small-btn soft" onclick="toggleZoneValve(${i})">${z.valve === 'Open' ? 'Close Valve' : 'Open Valve'}</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`,
+
+  rainwater: () => `${pageHead('Rainwater Harvesting & Greywater Reuse', 'Track rooftop rainwater collection, sump storage, and non-potable reuse savings.')}
+    <div class="grid kpis">
+      ${kpi('🌧️', state.rainTank + '%', 'Harvested Sump Level', '7,400 L stored', '#e0f2fe')}
+      ${kpi('♻️', '1,850 L', 'Weekly Greywater Reused', 'For gardening & flushing', '#d1fae5')}
+      ${kpi('⚡', 'Active', 'First-Flush Diverter', badge(state.rainHarvestActive ? 'Active' : 'Warning'), '#ccfbf1')}
+      ${kpi('💧', '22%', 'Freshwater Offset', 'Monthly conservation', '#f1f5f9')}
+    </div>
+    <div class="grid section-grid">
+      ${chartCard('Monthly Rainwater Harvested vs Reused (Litres)', 'rainChart', 'short')}
+      <div class="card">
+        <div class="section-title">Harvesting & Recharge Controls</div>
+        <p class="muted" style="font-size:13px;line-height:1.6">Automated first-flush diverters discard initial roof runoff before routing clean rainwater through sand-gravel filters into the underground sump.</p>
+        <div class="action-row">
+          <button class="small-btn primary" onclick="transferRainwater()">Transfer 500 L to Utility Tank</button>
+          <button class="small-btn soft" onclick="toggleRainDiverter()">${state.rainHarvestActive ? 'Pause Intake' : 'Enable Intake'}</button>
+        </div>
+      </div>
+    </div>`,
+
+  sensors: () => `${pageHead('IoT Sensor Nodes', 'Manage water quality probes, flow meters, and tank level sensors.')}
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="section-title" style="margin:0">Connected Field Nodes (${state.sensors.length})</div>
+        <button class="small-btn primary" onclick="addSensor()">＋ Register Sensor</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Node ID</th><th>Sensor Name</th><th>Category</th><th>Location</th><th>Battery</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${state.sensors.map((s, i) => `
+              <tr>
+                <td><b>${s.id}</b></td>
+                <td>${s.name}</td>
+                <td>${s.type}</td>
+                <td>${s.location}</td>
+                <td>${s.battery}%</td>
+                <td>${badge(s.status)}</td>
+                <td>
+                  <button class="small-btn soft" onclick="testSensor(${i})">Ping</button>
+                  <button class="small-btn soft" onclick="toggleSensor(${i})">${s.status === 'Online' ? 'Pause' : 'Resume'}</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`,
+
+  alerts: () => `${pageHead('Alerts & System Logs', 'Water quality warnings, tank thresholds, and sensor events.')}
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="section-title" style="margin:0">Active Notifications</div>
+        <button class="small-btn soft" onclick="clearAlerts()">Clear All</button>
+      </div>
+      ${state.alerts.length ? state.alerts.map((a, i) => `
+        <div class="alert-row">
+          <span class="alert-dot" style="background:${a.type === 'Critical' ? '#e11d48' : a.type === 'Warning' ? '#d97706' : '#0284c7'}"></span>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;gap:10px"><strong>${a.title}</strong>${badge(a.type)}</div>
+            <p>${a.desc}</p>
+            <small>${a.time} · ${a.read ? 'Read' : 'Unread'}</small>
+          </div>
+          <button class="small-btn soft" onclick="markRead(${i})">${a.read ? 'Read' : 'Acknowledge'}</button>
+        </div>
+      `).join('') : '<div class="empty">No active alerts. All water quality and flow parameters are normal.</div>'}
+    </div>`,
+
+  reports: () => `${pageHead('Reports & Data Export', 'Export water quality logs and consumption metrics.')}
+    <div class="grid section-grid">
+      ${chartCard('Monthly Water Consumption (kL)', 'reportChart')}
+      <div class="card">
+        <div class="section-title">Download Compliance & Usage Report</div>
+        <p class="muted" style="font-size:13px;line-height:1.6">Generate a structured CSV dataset containing current pH, TDS, Turbidity, AI Potability Verdict, WQI score, tank level, and consumption metrics.</p>
+        <div class="action-row">
+          <button class="small-btn primary" onclick="exportCSV()">↓ Download CSV Report</button>
+          <button class="small-btn soft" onclick="window.print()">Print / Save PDF</button>
+        </div>
+      </div>
+    </div>`
+};
+
+
+// ================= LOGIN, USER / ADMIN ACCOUNTS AND COMPLAINTS =================
+let selectedAuthRole = 'user';
+let activeAccount = null;
+let resetOtp = null;
+let resetAccountRef = null;
+
+function getAccounts(){try{return JSON.parse(localStorage.getItem('swms_accounts')||'[]')}catch(e){return []}}
+function putAccounts(v){localStorage.setItem('swms_accounts',JSON.stringify(v))}
+function getComplaints(){try{return JSON.parse(localStorage.getItem('swms_complaints')||'[]')}catch(e){return []}}
+function putComplaints(v){localStorage.setItem('swms_complaints',JSON.stringify(v))}
+function clearLoginMessages(){
+  ['userLoginMessage','adminLoginMessage'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent='';e.classList.remove('error')}});
+}
+function setFormMessage(msg,error=false){
+  const e=document.getElementById('authFormMessage');e.textContent=msg;e.classList.toggle('error',error);
+}
+function openAuthForm(role,mode){
+  selectedAuthRole=role;
+  document.getElementById('authModal').style.display='grid';
+  document.getElementById('authSignupForm').style.display=mode==='signup'?'block':'none';
+  document.getElementById('authForgotForm').style.display=mode==='forgot'?'block':'none';
+  document.getElementById('authModalTitle').textContent=mode==='signup'?'Create '+(role==='admin'?'Admin':'User')+' Account':'Recover '+(role==='admin'?'Admin':'User')+' Password';
+  document.getElementById('authModalDescription').textContent=mode==='signup'?'Enter your details to register a new account.':'Verify your registered phone number to reset your password.';
+  document.getElementById('authFormMessage').textContent='';
+  document.getElementById('forgotPhoneStep').style.display='block';
+  document.getElementById('forgotOtpStep').style.display='none';
+  resetOtp=null;resetAccountRef=null;
+}
+function closeAuthForm(){const m=document.getElementById('authModal');if(m)m.style.display='none'}
+function registerAccount(){
+  const name=document.getElementById('signupFullName').value.trim();
+  const username=document.getElementById('signupUsername').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  const phone=document.getElementById('signupPhone').value.trim();
+  if(!name||username.length<3||password.length<6||!phone){setFormMessage('Complete every field. Username must be 3+ characters and password 6+ characters.',true);return}
+  const accounts=getAccounts();
+  if(accounts.some(a=>a.role===selectedAuthRole&&a.username.toLowerCase()===username.toLowerCase())){setFormMessage('That username already exists for this account type.',true);return}
+  if(accounts.some(a=>a.role===selectedAuthRole&&a.phone===phone)){setFormMessage('That phone number is already registered for this account type.',true);return}
+  accounts.push({name,username,password,phone,role:selectedAuthRole,createdAt:new Date().toISOString()});
+  putAccounts(accounts);closeAuthForm();
+  const target=selectedAuthRole==='admin'?'adminLoginName':'userLoginName';
+  document.getElementById(target).value=username;
+  const msg=document.getElementById(selectedAuthRole+'LoginMessage');msg.classList.remove('error');msg.textContent='Account created successfully. Please log in.';
+}
+function loginAccount(role){
+  const prefix=role==='admin'?'admin':'user';
+  const username=document.getElementById(prefix+'LoginName').value.trim();
+  const password=document.getElementById(prefix+'LoginPassword').value;
+  let account=null;
+  if(role==='admin'&&username==='admin'&&password==='Admin@123'){
+    account={name:'System Administrator',username:'admin',role:'admin',phone:''};
+  }else{
+    account=getAccounts().find(a=>a.role===role&&a.username.toLowerCase()===username.toLowerCase()&&a.password===password);
+  }
+  if(!account){const m=document.getElementById(prefix+'LoginMessage');m.textContent='Invalid username or password. Check that you selected the correct account type.';m.classList.add('error');return}
+  activeAccount=account;
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  configureRoleNavigation();
+  navigate(role==='admin'?'complaintAdmin':'userHome');
+  const label=document.querySelector('.top-actions .demo-pill');
+  if(label)label.textContent=(role==='admin'?'● ADMIN · ':'● USER · ')+account.name;
+}
+function configureRoleNavigation(){
+  const admin=activeAccount.role==='admin';
+  document.querySelectorAll('.nav-item[data-page]').forEach(b=>b.style.display=admin?'':'none');
+  let userHome=document.getElementById('userHomeNav');
+  let userComplaint=document.getElementById('userComplaintNav');
+  let adminComplaint=document.getElementById('adminComplaintNav');
+  if(!userHome){
+    userHome=document.createElement('button');userHome.id='userHomeNav';userHome.className='nav-item';userHome.innerHTML='<span class="nav-icon">⌂</span>User Dashboard';userHome.onclick=()=>navigate('userHome');document.getElementById('sidebar').appendChild(userHome);
+    userComplaint=document.createElement('button');userComplaint.id='userComplaintNav';userComplaint.className='nav-item';userComplaint.innerHTML='<span class="nav-icon">✉</span>My Complaints';userComplaint.onclick=()=>navigate('userComplaints');document.getElementById('sidebar').appendChild(userComplaint);
+    adminComplaint=document.createElement('button');adminComplaint.id='adminComplaintNav';adminComplaint.className='nav-item';adminComplaint.innerHTML='<span class="nav-icon">📥</span>Complaint Inbox';adminComplaint.onclick=()=>navigate('complaintAdmin');document.getElementById('sidebar').appendChild(adminComplaint);
+  }
+  userHome.style.display=admin?'none':'block';userComplaint.style.display=admin?'none':'block';adminComplaint.style.display=admin?'block':'none';
+  const small=document.querySelector('.sidebar .brand small');if(small)small.textContent=admin?'Administrator':'User workspace';
+}
+function safeText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function complaintStatusClass(s){return s==='Resolved'?'resolved':s==='In Progress'?'in-progress':''}
+function renderUserComplaint(c){
+ return `<article class="complaint-item"><h3>${safeText(c.subject)}</h3><div class="complaint-meta">${safeText(c.category)} · ${safeText(c.location)} · ${new Date(c.createdAt).toLocaleString()}</div><p>${safeText(c.description)}</p><span class="complaint-status ${complaintStatusClass(c.status)}">${safeText(c.status)}</span>${c.adminNote?`<p><b>Admin update:</b> ${safeText(c.adminNote)}</p>`:''}</article>`;
+}
+function renderAdminComplaint(c){
+ return `<article class="complaint-item"><h3>${safeText(c.subject)}</h3><div class="complaint-meta">Submitted by ${safeText(c.name)} (@${safeText(c.username)}) · ${safeText(c.phone)}<br>${safeText(c.category)} · ${safeText(c.location)} · ${new Date(c.createdAt).toLocaleString()}</div><p>${safeText(c.description)}</p><span class="complaint-status ${complaintStatusClass(c.status)}">${safeText(c.status)}</span><div class="complaint-actions">${c.status!=='In Progress'?`<button onclick="setComplaintStatus('${c.id}','In Progress')">Accept complaint</button>`:''}${c.status!=='Resolved'?`<button onclick="resolveUserComplaint('${c.id}')">Mark as solved</button>`:''}<button onclick="addComplaintUpdate('${c.id}')">Send update</button></div>${c.adminNote?`<p><b>Update:</b> ${safeText(c.adminNote)}</p>`:''}</article>`;
+}
+function userHomePage(){
+ const mine=getComplaints().filter(c=>c.username===activeAccount.username);
+ const done=mine.filter(c=>c.status==='Resolved').length;
+ return `${pageHead('User Dashboard','Your water quality overview and service support centre.')}
+ <div class="grid kpis">
+ ${kpi('💧',state.tank+'%','Main Tank Storage','Current level','#e0f2fe')}
+ ${kpi('🧪',computeWQI()+'/100','Water Quality Index','Latest sample','#dbeafe')}
+ ${kpi('✉',mine.length,'My Complaints','Submitted requests','#e0f2fe')}
+ ${kpi('✓',done,'Resolved Complaints','Completed requests','#d1fae5')}
+ </div>
+ <div class="grid section-grid">
+ <div class="card"><div class="section-title">Water quality snapshot</div><div class="metric-list"><div class="metric"><strong>${state.quality.ph} pH</strong><small>pH level</small></div><div class="metric"><strong>${state.quality.tds} ppm</strong><small>TDS</small></div><div class="metric"><strong>${state.quality.turbidity} NTU</strong><small>Turbidity</small></div></div></div>
+ <div class="card"><div class="section-title">Need help?</div><p class="muted">Report water quality, supply, leakage or maintenance issues. Your complaint will be delivered to the administrator's complaint inbox in this browser.</p><button class="small-btn primary" onclick="navigate('userComplaints')">Open complaint centre</button></div>
+ </div>`;
+}
+function userComplaintsPage(){
+ const mine=getComplaints().filter(c=>c.username===activeAccount.username).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+ return `${pageHead('Complaint Centre','Submit an issue and track the administrator’s response.')}
+ <div class="card"><div class="section-title">Submit a complaint</div><form class="complaint-form" onsubmit="event.preventDefault();submitUserComplaint()">
+ <div><label for="cmpCategory">Category</label><select id="cmpCategory" required><option value="">Select category</option><option>Water quality</option><option>Water supply</option><option>Leakage</option><option>Tank or pump</option><option>Billing or usage</option><option>Other</option></select></div>
+ <div><label for="cmpLocation">Location / area</label><input id="cmpLocation" required placeholder="Enter location"></div>
+ <div class="wide"><label for="cmpSubject">Subject</label><input id="cmpSubject" required maxlength="100" placeholder="Short title of your complaint"></div>
+ <div class="wide"><label for="cmpDescription">Description</label><textarea id="cmpDescription" required maxlength="1000" placeholder="Describe the issue"></textarea></div>
+ <div class="wide"><button class="small-btn primary" type="submit">Submit complaint</button></div></form></div>
+ <div class="card" style="margin-top:18px"><div class="section-title">My complaints (${mine.length})</div><div class="complaint-list">${mine.length?mine.map(renderUserComplaint).join(''):'<p class="muted">No complaints submitted yet.</p>'}</div></div>`;
+}
+function complaintAdminPage(){
+ const all=getComplaints().sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+ const pending=all.filter(c=>c.status==='Submitted').length,progress=all.filter(c=>c.status==='In Progress').length,resolved=all.filter(c=>c.status==='Resolved').length;
+ return `${pageHead('Complaint Inbox','Review, accept and resolve complaints submitted by users.')}
+ <div class="grid kpis">${kpi('📥',all.length,'Total Complaints','All users','#e0f2fe')}${kpi('🕒',pending,'Awaiting Review','New requests','#fff3d9')}${kpi('⚙',progress,'In Progress','Accepted requests','#dbeafe')}${kpi('✓',resolved,'Resolved','Completed requests','#d1fae5')}</div>
+ <div class="card"><div class="section-title">All user complaints</div><div class="complaint-list">${all.length?all.map(renderAdminComplaint).join(''):'<p class="muted">There are no complaints yet.</p>'}</div></div>`;
+}
+function submitUserComplaint(){
+ const category=document.getElementById('cmpCategory').value,location=document.getElementById('cmpLocation').value.trim(),subject=document.getElementById('cmpSubject').value.trim(),description=document.getElementById('cmpDescription').value.trim();
+ if(!category||!location||!subject||!description){toast('Please complete all complaint fields.');return}
+ const all=getComplaints();all.push({id:'CMP-'+Date.now(),username:activeAccount.username,name:activeAccount.name,phone:activeAccount.phone||'',category,location,subject,description,status:'Submitted',adminNote:'',createdAt:new Date().toISOString()});putComplaints(all);navigate('userComplaints');toast('Complaint submitted to the admin inbox.');
+}
+function setComplaintStatus(id,status){
+ const all=getComplaints(),c=all.find(x=>x.id===id);if(!c)return;c.status=status;c.adminNote=status==='In Progress'?'Your complaint has been accepted. Work is in progress.':c.adminNote;c.updatedAt=new Date().toISOString();putComplaints(all);navigate('complaintAdmin');toast('Complaint status updated.');
+}
+function resolveUserComplaint(id){
+ const note=prompt('Enter the resolution details for the user:','Your complaint has been reviewed and resolved.');if(note===null)return;
+ const all=getComplaints(),c=all.find(x=>x.id===id);if(!c)return;c.status='Resolved';c.adminNote=note.trim()||'Resolved by administrator.';c.updatedAt=new Date().toISOString();putComplaints(all);navigate('complaintAdmin');toast('Complaint marked as solved.');
+}
+function addComplaintUpdate(id){
+ const note=prompt('Enter an update to share with the user:');if(note===null||!note.trim())return;
+ const all=getComplaints(),c=all.find(x=>x.id===id);if(!c)return;c.adminNote=note.trim();c.updatedAt=new Date().toISOString();putComplaints(all);navigate('complaintAdmin');toast('Update saved for the user.');
+}
+function sendDemoOtp(){
+ const username=document.getElementById('forgotUsername').value.trim(),phone=document.getElementById('forgotPhone').value.trim();
+ const account=getAccounts().find(a=>a.role===selectedAuthRole&&a.username.toLowerCase()===username.toLowerCase()&&a.phone===phone);
+ if(!account){setFormMessage('Username and registered phone number did not match.',true);return}
+ resetAccountRef=account;resetOtp=String(Math.floor(100000+Math.random()*900000));
+ document.getElementById('forgotPhoneStep').style.display='none';document.getElementById('forgotOtpStep').style.display='block';
+ document.getElementById('otpDemoNotice').textContent='DEMO OTP: '+resetOtp+' — SMS delivery is not connected in this standalone HTML prototype.';
+ setFormMessage('Demo OTP generated. Use the code shown above.');
+}
+function resetAccountPassword(){
+ const otp=document.getElementById('forgotOtp').value.trim(),pw=document.getElementById('newPassword').value,confirm=document.getElementById('confirmPassword').value;
+ if(!resetAccountRef||otp!==resetOtp){setFormMessage('Incorrect OTP. Please try again.',true);return}
+ if(pw.length<6){setFormMessage('Password must contain at least 6 characters.',true);return}
+ if(pw!==confirm){setFormMessage('Passwords do not match.',true);return}
+ const accounts=getAccounts(),i=accounts.findIndex(a=>a.role===selectedAuthRole&&a.username===resetAccountRef.username);
+ if(i<0){setFormMessage('Account not found. Please restart recovery.',true);return}
+ accounts[i].password=pw;putAccounts(accounts);const role=selectedAuthRole;const username=accounts[i].username;resetOtp=null;resetAccountRef=null;closeAuthForm();
+ document.getElementById((role==='admin'?'admin':'user')+'LoginName').value=username;
+ const msg=document.getElementById(role+'LoginMessage');msg.classList.remove('error');msg.textContent='Password reset successfully. Sign in with your new password.';
+}
+
+// Preserve the original monitoring dashboard pages for administrators and add role-specific pages.
+titles.userHome='User Dashboard';
+titles.userComplaints='Complaint Centre';
+titles.complaintAdmin='Complaint Inbox';
+pages.userHome=userHomePage;
+pages.userComplaints=userComplaintsPage;
+pages.complaintAdmin=complaintAdminPage;
+
+
+function makeChart(id, type, labels, datasets) {
+  const el = document.getElementById(id);
+  if (!el || !window.Chart) return;
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(el, {
+    type,
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: type === 'doughnut' || datasets.length > 1, labels: { color: '#475569', font: { family: 'Inter', size: 12 } } }
+      },
+      scales: type === 'doughnut' ? {} : {
+        x: { grid: { display: false }, ticks: { color: '#64748b' } },
+        y: { beginAtZero: type === 'bar', grid: { color: '#f1f5f9' }, ticks: { color: '#64748b' } }
+      }
+    }
+  });
+}
+
+function drawCharts(page) {
+  setTimeout(() => {
+    if (page === 'dashboard') {
+      makeChart('overviewQualityChart', 'line', ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'], [
+        { label: 'Water Quality Index', data: [92, 94, 93, 95, 94, computeWQI()], borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.1)', fill: true, tension: 0.4 }
+      ]);
+      makeChart('overviewChart', 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [
+        { label: 'Usage (L)', data: [3200, 3500, 3100, 3900, 3600, 4100, 3420], backgroundColor: '#38bdf8', borderRadius: 6 }
+      ]);
+    }
+    if (page === 'aiQuality') {
+      const res = runAIWaterQualityModel(state.aiModelInput);
+      makeChart('aiWqiForecastChart', 'line', ['Now', '+1h', '+2h', '+3h', '+4h', '+5h'], [
+        { label: 'Predicted WQI Score', data: res.forecastWqi, borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.12)', fill: true, tension: 0.35 }
+      ]);
+      makeChart('aiFeatureChart', 'bar', res.contributions.map(c => c.feature.split(' ')[0]), [
+        { label: 'Risk Weight (%)', data: res.contributions.map(c => Math.max(4, c.impact)), backgroundColor: '#0d9488', borderRadius: 6 }
+      ]);
+    }
+    if (page === 'quality') {
+      makeChart('qualityChart', 'line', ['T-6h', 'T-5h', 'T-4h', 'T-3h', 'T-2h', 'T-1h', 'Now'], [
+        { label: 'TDS (ppm / 10)', data: [24.0, 24.2, 24.8, 24.5, 24.3, 24.6, state.quality.tds / 10], borderColor: '#0d9488', tension: 0.35 },
+        { label: 'pH Level', data: [7.1, 7.2, 7.2, 7.3, 7.2, 7.1, state.quality.ph], borderColor: '#0284c7', tension: 0.35 }
+      ]);
+    }
+    if (page === 'consumption') {
+      makeChart('consumptionChart', 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [
+        { label: 'Litres', data: [3100, 3500, 3300, 3900, 3650, 4100, 3420], borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.1)', fill: true, tension: 0.35 }
+      ]);
+      makeChart('sectorChart', 'doughnut', ['Drinking & Kitchen', 'Domestic & Cleaning', 'Garden & Utility'], [
+        { data: [820, 1850, 750], backgroundColor: ['#0284c7', '#14b8a6', '#7dd3fc'], borderWidth: 0 }
+      ]);
+    }
+    if (page === 'rainwater') {
+      makeChart('rainChart', 'bar', ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'], [
+        { label: 'Rainwater Harvested (L)', data: [4200, 6800, 7500, 6100, 3900, 2800], backgroundColor: '#0284c7', borderRadius: 6 },
+        { label: 'Reused Non-Potable (L)', data: [3100, 4500, 5200, 4800, 3200, 2100], backgroundColor: '#14b8a6', borderRadius: 6 }
+      ]);
+    }
+    if (page === 'reports') {
+      makeChart('reportChart', 'bar', ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'], [
+        { label: 'Consumption (kL)', data: [102, 98, 106, 101, 96, 98.4], backgroundColor: '#0ea5e9', borderRadius: 6 }
+      ]);
+    }
+  }, 30);
+}
+
+/* AI Water Quality Actions */
+function updateAIInput(key, val) {
+  state.aiModelInput[key] = val;
+  navigate('aiQuality');
+}
+
+function syncAIFromSensors() {
+  state.aiModelInput = {
+    ph: state.quality.ph,
+    tds: state.quality.tds,
+    turbidity: state.quality.turbidity,
+    do: state.quality.do,
+    chlorine: state.quality.chlorine,
+    hardness: state.quality.hardness,
+    conductivity: state.quality.ec
+  };
+  navigate('aiQuality');
+  toast('Synced live telemetry into AI model.');
+}
+
+function loadAIPreset(type) {
+  if (type === 'hard') {
+    state.aiModelInput = { ph: 8.1, tds: 540, turbidity: 1.8, do: 6.4, chlorine: 0.2, hardness: 310, conductivity: 980 };
+  } else if (type === 'contaminated') {
+    state.aiModelInput = { ph: 5.9, tds: 680, turbidity: 6.8, do: 4.2, chlorine: 0.05, hardness: 260, conductivity: 1210 };
+  } else {
+    state.aiModelInput = { ph: 7.1, tds: 110, turbidity: 0.3, do: 7.8, chlorine: 0.35, hardness: 65, conductivity: 220 };
+  }
+  navigate('aiQuality');
+  toast('Loaded sample water profile into AI analyzer.');
+}
+
+function applyAIToLiveSystem() {
+  const inp = state.aiModelInput;
+  state.quality.ph = inp.ph;
+  state.quality.tds = inp.tds;
+  state.quality.turbidity = inp.turbidity;
+  state.quality.do = inp.do;
+  state.quality.chlorine = inp.chlorine;
+  state.quality.hardness = inp.hardness;
+  const res = runAIWaterQualityModel(inp);
+  addAlert(
+    res.statusBadge === 'Potable' ? 'Info' : res.statusBadge === 'Treatment Needed' ? 'Warning' : 'Critical',
+    `AI Water Quality Verdict: ${res.classification} (${res.confidence}%)`,
+    res.actions[0]
+  );
+  navigate('dashboard');
+  toast('Applied AI sample readings to live dashboard.');
+}
+
+/* Water Quality Lab Actions */
+function updateQualityParam(key, val) {
+  state.quality[key] = val;
+  state.aiModelInput[key] = val;
+  const wqi = computeWQI();
+  if (wqi < 75) {
+    addAlert('Critical', 'Water Quality Threshold Breached', `${key.toUpperCase()} reading (${val}) pushed WQI down to ${wqi}/100.`);
+  }
+  navigate('quality');
+}
+
+function switchWaterSource(src) {
+  state.sourceFilter = src;
+  if (src === 'RO Filtration Outlet') {
+    state.quality = { ph: 7.0, tds: 85, turbidity: 0.3, do: 7.8, chlorine: 0.1, hardness: 45, temp: 23.5, ec: 170 };
+  } else if (src === 'Overhead Tank') {
+    state.quality = { ph: 7.4, tds: 270, turbidity: 1.4, do: 6.9, chlorine: 0.3, hardness: 150, temp: 25.1, ec: 540 };
+  } else {
+    state.quality = { ph: 7.2, tds: 245, turbidity: 0.9, do: 7.4, chlorine: 0.4, hardness: 135, temp: 24.2, ec: 490 };
+  }
+  syncAIFromSensors();
+  navigate('quality');
+  toast(`Switched telemetry to ${src}`);
+}
+
+function simulateContamination() {
+  state.quality.turbidity = 6.4;
+  state.quality.tds = 580;
+  syncAIFromSensors();
+  addAlert('Critical', 'High Turbidity & TDS Alert', 'Turbidity spiked to 6.4 NTU at ' + state.sourceFilter + '. Filtration check required.');
+  navigate('quality');
+  toast('Turbidity spike simulated!', 3200);
+}
+
+function resetQuality() {
+  state.quality = { ph: 7.2, tds: 245, turbidity: 0.9, do: 7.4, chlorine: 0.4, hardness: 135, temp: 24.2, ec: 490 };
+  syncAIFromSensors();
+  navigate('quality');
+  toast('Water quality readings restored to normal.');
+}
+
+/* Tank, Filtration, Distribution & Rainwater Actions */
+function previewTank(v) {
+  const f = $('#tankFill');
+  if (f) f.style.height = v + '%';
+  const h = document.querySelector('.tank-info h2');
+  if (h) h.textContent = v + '%';
+}
+
+function saveTank() {
+  const v = +($('#tankRange')?.value || state.tank);
+  const cap = +($('#capacity')?.value || state.capacity);
+  if (cap < 100) { toast('Enter a valid tank capacity.'); return; }
+  state.tank = Math.max(0, Math.min(100, v));
+  state.capacity = cap;
+  if (state.tank < 25) {
+    state.pump = true;
+    addAlert('Warning', 'Low Tank Reserve (<25%)', 'Auto-fill pump activated automatically.');
+  }
+  if (state.tank > 90) state.pump = false;
+  navigate('tank');
+  toast('Tank configuration updated.');
+}
+
+function changeTank(n) {
+  state.tank = Math.max(0, Math.min(100, state.tank + n));
+  navigate('tank');
+}
+
+function togglePump() {
+  state.pump = !state.pump;
+  navigate('tank');
+  toast('Pump ' + (state.pump ? 'turned ON' : 'turned OFF'));
+}
+
+function resetFilter(i) {
+  state.filters[i].life = 100;
+  state.filters[i].status = 'Optimal';
+  state.filters[i].lastReplaced = '2026-11-24';
+  navigate('filtration');
+  toast(state.filters[i].name + ' replaced & reset to 100%.');
+}
+
+function runBackwash() {
+  toast('Automated multi-grade sand & RO membrane backwash completed.');
+}
+
+function toggleZoneValve(i) {
+  const z = state.zones[i];
+  z.valve = z.valve === 'Open' ? 'Closed' : 'Open';
+  z.status = z.valve === 'Open' ? 'Normal' : 'Warning';
+  navigate('distribution');
+  toast(`${z.name} valve is now ${z.valve}.`);
+}
+
+function transferRainwater() {
+  if (state.rainTank < 10) { toast('Rainwater sump level too low.'); return; }
+  state.rainTank = Math.max(0, state.rainTank - 5);
+  state.tank = Math.min(100, state.tank + 5);
+  navigate('rainwater');
+  toast('Transferred 500 L of filtered rainwater to main storage.');
+}
+
+function toggleRainDiverter() {
+  state.rainHarvestActive = !state.rainHarvestActive;
+  navigate('rainwater');
+  toast('Rainwater intake ' + (state.rainHarvestActive ? 'enabled.' : 'paused.'));
+}
+
+function testLeak() {
+  state.leak = true;
+  addAlert('Critical', 'Pipeline Flow Anomaly Detected', 'Flow rate jumped to 18.4 L/min on Pipeline A.');
+  navigate('leakage');
+  toast('Leakage alert triggered!', 3200);
+}
+
+function closeValve() {
+  state.leak = false;
+  navigate('leakage');
+  toast('Valve isolated and flow normalized.');
+}
+
+function addSensor() {
+  const name = prompt('Enter sensor name (e.g., ORP Sensor):');
+  if (!name) return;
+  const location = prompt('Installation location:', 'Main Reservoir') || 'Main Reservoir';
+  state.sensors.push({ id: 'WQ-' + String(Date.now()).slice(-3), name, type: 'Water Quality', location, battery: 100, status: 'Online' });
+  navigate('sensors');
+  toast('Sensor node registered.');
+}
+
+function testSensor(i) { toast(state.sensors[i].name + ' responded in 18ms (Healthy).'); }
+function toggleSensor(i) {
+  state.sensors[i].status = state.sensors[i].status === 'Online' ? 'Offline' : 'Online';
+  navigate('sensors');
+}
+
+function markRead(i) { state.alerts[i].read = true; navigate('alerts'); }
+function clearAlerts() { state.alerts = []; navigate('alerts'); toast('All alerts cleared.'); }
+
+function exportCSV() {
+  const q = state.quality;
+  const aiRes = runAIWaterQualityModel(q);
+  const rows = [
+    ['Parameter', 'Value'],
+    ['Sampling Point', state.sourceFilter],
+    ['Water Quality Index (WQI)', computeWQI() + '/100'],
+    ['AI Potability Verdict', aiRes.classification + ' (' + aiRes.confidence + '%)'],
+    ['pH Level', q.ph],
+    ['TDS (ppm)', q.tds],
+    ['Turbidity (NTU)', q.turbidity],
+    ['Dissolved Oxygen (mg/L)', q.do],
+    ['Residual Chlorine (mg/L)', q.chlorine],
+    ['Total Hardness (mg/L)', q.hardness],
+    ['Main Tank Level (%)', state.tank + '%'],
+    ['Rainwater Sump Level (%)', state.rainTank + '%'],
+    ['Leakage Status', state.leak ? 'Detected' : 'Normal']
+  ];
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = 'hydrowise-quality-report.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('CSV report downloaded.');
+}
+
+document.querySelectorAll('.nav-item[data-page]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.page)));
+</script>
+</body>
+</html>
